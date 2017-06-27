@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block header %}
+    {{ profile.slug }}|{{ block.super }}
+{% endblock %}
+{% block content %}
+    <div>
+    {% for profile in profiles %}
+    <li>
+    <a href='{% url "accounts:detail" slug=profile.user.username %}'>
+        {{ profile.user.username }}
+    </a>
+    </li>
+    {% endfor %}
+    </div>
+{% endblock %}

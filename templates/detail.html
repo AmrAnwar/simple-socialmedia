@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block header %}
+    {{ profile.slug }}|{{ block.super }}
+{% endblock %}
+{% block content %}
+    <div>
+    <h1> HELLO {{ profile.user.username}}</h1>
+    </div>
+    <div>
+    {% if request.user == profile.user %}
+    <form method="POST" action=".">
+        {% csrf_token %}
+        {{form|crispy}}
+        <input type="submit" class="btn btn-primary" value="Post">
+    </form>
+    {% endif %}
+    {% for comment in comments %}
+                <blockquote class="blockquote">
+                    <p>{{ comment.content }}</p>
+                    <footer>{{ comment.user }} | {{ comment.timestamp|timesince }} ago
+                        | <a href="#" class="comment-reply-btn">Replay</a>
+                        | {% if comment.children.count > 0 %}
+                            <a class="comment-comment-btn">{{ comment.children.count }} Comments </a>
+                        {% endif %}
+                    </footer>
+                    <div class="comment-reply" style="display: none">
+                        <blockquote class="blockquote">
+
+                            {% for replay in comment.children %}
+                                <p>{{ replay.content }}</p>
+
+                                <footer>{{ replay.user }} | {{ replay.timestamp|timesince }} ago</footer>
+                            {% endfor %}
+                        </blockquote>
+
+                    <form method="POST" action=".">{% csrf_token %}
+                        {{ form|crispy }}
+                        <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                        <input type="submit" class="btn btn-default" value="Reply">
+                    </form>
+
+                    </div>
+
+                </blockquote>
+    {% endfor %}
+    </div>
+{% endblock %}
