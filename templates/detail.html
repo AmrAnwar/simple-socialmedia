@@ -19,10 +19,23 @@
     {% for comment in comments %}
                 <blockquote class="blockquote">
                     <p>{{ comment.content }}</p>
+
+                    <p>
+                        <a href="{{ comment.get_like_url }}">
+                            {% if request.user in comment.get_like_instances %}
+                            <span class="glyphicon glyphicon-heart" style="color: #993333"></span>
+                            {% else %}
+                            <span class="glyphicon glyphicon-heart" style="color: darkgray"></span>
+                            {% endif %}
+                        </a>
+                        {{ comment.likes.count }}
+                    </p>
                     <footer>{{ comment.user }} | {{ comment.timestamp|timesince }} ago
-                        | <a href="#" class="comment-reply-btn">Replay</a>
-                        | {% if comment.children.count > 0 %}
-                            <a class="comment-comment-btn">{{ comment.children.count }} Comments </a>
+                        |
+                        <a href="#" class="comment-reply-btn">Replay</a>
+                        |
+                        {% if comment.children.count > 0 %}
+                          {{ comment.children.count }} Comments
                         {% endif %}
                     </footer>
                     <div class="comment-reply" style="display: none">
