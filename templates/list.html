@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block header %}
     {{ block.super }}
@@ -16,7 +17,9 @@
             <div class="row">
                 <div class="col-sm-1 col-sm-offset-1">
                     <div class="thumbnail">
-                        <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
+
+                        <img class="img-responsive user-photo"
+                             src="https://scontent-cai1-1.xx.fbcdn.net/v/t1.0-9/16939323_1401058509968864_6117613114938574070_n.jpg?oh=93cd96fc7ee7749f3ac80a3c53bcea83&oe=59DF1074">
                     </div><!-- /thumbnail -->
                 </div><!-- /col-sm-1 -->
                 <div class="col-sm-8">
@@ -30,22 +33,59 @@
                         <div class="panel-body">
                             {{ comment.content }}
                         </div><!-- /panel-body -->
+                        <footer>
+                            <strong>
+                                <a href="#" class="comment-reply-btn"> Replay </a>
+                                |
+                                {% if comment.children.count > 0 %}
+                                    {{ comment.children.count }} Comments
+                                {% endif %}
+                                |
+                                <a href="{{ comment.get_like_url }}">
+                                    {% if request.user in comment.get_like_instances %}
+                                        <span class="glyphicon glyphicon-heart" style="color: #993333"></span>
+                                    {% else %}
+                                        <span class="glyphicon glyphicon-heart" style="color: darkgray"></span>
+                                    {% endif %}
+                                </a>
+                                {{ comment.likes.count }}
+
+                            </strong>
+                            <div class="comment-reply" style="display: none">
+                                <blockquote class="blockquote">
+                                    {% for replay in comment.children %}
+                                        <p>{{ replay.content }}</p>
+                                        <footer>
+                                            {{ replay.user }} | {{ replay.timestamp|timesince }} ago
+                                        </footer>
+                                    {% endfor %}
+                                </blockquote>
+                                <form name="form" method="POST"
+                                      action="{% url "accounts:detail" slug=comment.user.username %}/">{% csrf_token %}
+                                    {{ form|crispy }}
+                                    <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                                    <input type="submit" class="btn btn-default" value="Reply">
+                                </form>
+                            </div>
+                        </footer>
                     </div><!-- /panel panel-default -->
                 </div><!-- /col-sm-5 -->
             </div><!-- /row -->
         {% endfor %}
 
-        <div>
+<div class="col-sm-offset-1" >
     {% else %}
-        <div class="alert alert-warning col-sm-offset-1 col-sm-9">
+
+        <div class="alert alert-warning col-sm-10">
             <h4><strong>Warning!</strong> you has no followers</h4>
         </div>
     {% endif %}
 
-    <div class="alert alert-info col-sm-offset-1 col-sm-9">
-        <h4>You Can Follow Users like :</h4>
-    </div>
-    </div>
+<div class="alert alert-info col-sm-10">
+    <h4>You Can Follow Users like :</h4>
+</div>
+    {% include "profiles.html" %}
+</div>
 
 
 {% endblock %}

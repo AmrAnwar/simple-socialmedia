@@ -1,0 +1,19 @@
+{% for profile in users %}
+    {% if request.user != profile.user %}
+      <div class="col-sm-3">
+        <div class="thumbnail">
+          <img
+            src="https://scontent-cai1-1.xx.fbcdn.net/v/t1.0-9/16939323_1401058509968864_6117613114938574070_n.jpg?oh=93cd96fc7ee7749f3ac80a3c53bcea83&oe=59DF1074"
+            alt="...">
+          <div class="caption">
+            <h3>{{ profile.user }}</h3>
+            <p>interest in : {{ profile.interests}}</p>
+            <p><a href="{{ profile.get_absolute_url }}" class="btn btn-primary" role="button">View</a>
+              {% include "follow_button.html" %}
+            </p>
+
+          </div>
+        </div>
+      </div>
+    {% endif %}
+{% endfor %}

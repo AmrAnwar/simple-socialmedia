@@ -13,9 +13,8 @@ from django.urls import reverse
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
-    description = models.CharField(max_length=100, default="")
+    interests = models.CharField(max_length=100, default="")
     slug = models.SlugField(unique=True, null=True)
-
     followers = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True,
                                        related_name="followers")
 

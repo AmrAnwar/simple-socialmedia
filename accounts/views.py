@@ -2,6 +2,7 @@ from .models import UserProfile
 from comments.forms import CommentForm
 from comments.models import Comment
 from django.conf import settings
+from django.db.models import Q
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404  # HttpResponse
@@ -51,14 +52,41 @@ def profile_detail(request, slug=None):
 
 
 def profile_list(request):
-    qs = UserProfile.objects.all()
-    content = {
-        "profiles": qs,
+    pass
+    # qs = UserProfile.objects.all()
+    # content = {
+    #     "profiles": qs,
+    # }
+    # return render(request, "list.html", content)
+
+
+def about(request):
+    return render(request, "about.html")
+
+
+def search(request):
+    query = request.GET.get("search")
+    user_ = get_object_or_404(UserProfile,user=request.user)
+    print query
+    query_list = None
+    if query:
+        query_list = UserProfile.objects.filter(
+            Q(user__username__icontains=query) |
+            Q(interests__icontains=query) |
+            Q(user__first_name__icontains=query) |
+            Q(user__last_name__icontains=query)
+        ).distinct()
+    print query_list
+    context = {
+        'users': query_list,
+        'user_': user_,
     }
-    return render(request, "list.html", content)
+    return render(request, "search_profiles.html", context)
 
 
 def main_page(request):
+    query_list_users = UserProfile.objects.all()
+    form = CommentForm(request.POST or None)
     user = request.user
     comments = None
     if user.is_authenticated():
@@ -69,6 +97,9 @@ def main_page(request):
     content = {
         "comments": comments,
         "user_": user_,
+        'form': form,
+        "users": query_list_users,
+
     }
     return render(request, "list.html", content)
     # return redirect("accounts:list")
@@ -99,7 +130,6 @@ class FollowToggle(RedirectView):
         user_ = get_object_or_404(UserProfile, user=self.request.user)
         if self.request.user.is_authenticated():
             if profile_instance.user in user_.followers.all():
-                print "AAA"
                 user_.followers.remove(profile_instance.user)
             else:
                 user_.followers.add(profile_instance.user)
