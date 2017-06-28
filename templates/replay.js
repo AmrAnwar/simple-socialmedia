@@ -6,5 +6,13 @@ $(document).ready(function () {
           event.preventDefault();
           $(this).parent().next(".comment-reply").fadeToggle();
       });
+      // $("#following").hover(function(){
+      //
+      //       // $(".unfollow").show();
+      //   },
+      //   function(){
+      //     $(this).show();
+      //       // $(".unfollow").hide();
+      //   });
 
 });

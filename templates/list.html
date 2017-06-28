@@ -1,16 +1,51 @@
 {% extends "base.html" %}
 
 {% block header %}
-    {{ profile.slug }}|{{ block.super }}
+    {{ block.super }}
 {% endblock %}
 {% block content %}
-    <div>
-    {% for profile in profiles %}
-    <li>
-    <a href='{% url "accounts:detail" slug=profile.user.username %}'>
-        {{ profile.user.username }}
-    </a>
-    </li>
-    {% endfor %}
+
+    <div class="row">
+        <br>
+        {#        <div class="col-sm-12">#}
+        {#            <h3>User Comment Example</h3>#}
+        {#        </div><!-- /col-sm-12 -->#}
+    </div><!-- /row -->
+    {% if comments %}
+        {% for comment in comments %}
+            <div class="row">
+                <div class="col-sm-1 col-sm-offset-1">
+                    <div class="thumbnail">
+                        <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
+                    </div><!-- /thumbnail -->
+                </div><!-- /col-sm-1 -->
+                <div class="col-sm-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a href='{% url "accounts:detail" slug=comment.user.username %}'>
+                                <strong>{{ comment.user }}</strong>
+                            </a>
+                            <span class="text-muted">Posted {{ comment.timestamp|timesince }}</span>
+                        </div>
+                        <div class="panel-body">
+                            {{ comment.content }}
+                        </div><!-- /panel-body -->
+                    </div><!-- /panel panel-default -->
+                </div><!-- /col-sm-5 -->
+            </div><!-- /row -->
+        {% endfor %}
+
+        <div>
+    {% else %}
+        <div class="alert alert-warning col-sm-offset-1 col-sm-9">
+            <h4><strong>Warning!</strong> you has no followers</h4>
+        </div>
+    {% endif %}
+
+    <div class="alert alert-info col-sm-offset-1 col-sm-9">
+        <h4>You Can Follow Users like :</h4>
     </div>
+    </div>
+
+
 {% endblock %}

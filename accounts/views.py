@@ -2,8 +2,10 @@ from .models import UserProfile
 from comments.forms import CommentForm
 from comments.models import Comment
 from django.conf import settings
+
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404  # HttpResponse
+#
 
 from django.views.generic import RedirectView
 from django.shortcuts import (
@@ -16,15 +18,17 @@ from django.shortcuts import (
 # Create your views here.
 def profile_detail(request, slug=None):
     profile_instance = get_object_or_404(UserProfile, slug=slug)
+    user_ = None
+    if request.user.is_authenticated:
+        user_ = get_object_or_404(UserProfile, user=request.user)
     form = CommentForm(request.POST or None)
-
     if form.is_valid():
         content = form.cleaned_data.get("content")
         parent = None
         new_comment = Comment.objects.create(
             user=request.user,
             content=content,
-            parent=parent
+            parent=parent,
         )
         try:
             parent = int(request.POST.get("parent_id"))
@@ -41,8 +45,8 @@ def profile_detail(request, slug=None):
         "profile": profile_instance,
         'form': form,
         "comments": qs_comments,
+        "user_": user_,
     }
-
     return render(request, "detail.html", content)
 
 
@@ -55,22 +59,50 @@ def profile_list(request):
 
 
 def main_page(request):
-    return redirect("accounts:list")
+    user = request.user
+    comments = None
+    if user.is_authenticated():
+        user_ = get_object_or_404(UserProfile, user=request.user)
+        print (user_.followers.all())
+        comments = Comment.objects.filter(user__in=(user_.followers.all()))
+        print (comments)
+    content = {
+        "comments": comments,
+        "user_": user_,
+    }
+    return render(request, "list.html", content)
+    # return redirect("accounts:list")
 
 
 class CommentLikeToggle(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
-        # slug = self.kwargs.get("slug")
-        # print (slug)
         comment_id = self.kwargs.get("comment_id")
         print (comment_id)
         comment_instance = get_object_or_404(Comment, id=comment_id)
         profile_instance = get_object_or_404(UserProfile, user=comment_instance.user)
-        url = profile_instance.get_absolute_url()
+        url_ = profile_instance.get_absolute_url()
         user = self.request.user
         if user.is_authenticated():
             if user in comment_instance.likes.all():
                 comment_instance.likes.remove(user)
             else:
                 comment_instance.likes.add(user)
-        return (url)
+        return url_
+
+
+class FollowToggle(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        slug = self.kwargs.get("slug")
+        print (slug)
+        profile_instance = get_object_or_404(UserProfile, slug=slug)
+        url_ = profile_instance.get_absolute_url()
+        user_ = get_object_or_404(UserProfile, user=self.request.user)
+        if self.request.user.is_authenticated():
+            if profile_instance.user in user_.followers.all():
+                print "AAA"
+                user_.followers.remove(profile_instance.user)
+            else:
+                user_.followers.add(profile_instance.user)
+        print (user_.user)
+        print (user_.followers.all())
+        return url_

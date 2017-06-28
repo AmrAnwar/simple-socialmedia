@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
+from django.shortcuts import get_object_or_404
 
 
 # from django.contrib.contenttypes.fields import GenericForeignKey
@@ -30,3 +31,6 @@ class Comment(models.Model):
 
     def get_like_instances(self):
         return self.likes.all()
+
+    def get_user_object(self):
+        return get_object_or_404(self.__class__, user=self.user)

@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 from django.db.models.signals import pre_save, post_save
 from django.utils.text import slugify
 from django.contrib.contenttypes.models import ContentType
-from django.core.urlresolvers import reverse
+from django.conf import settings
+from django.urls import reverse
 
 
 # Create your models here.
@@ -15,9 +16,17 @@ class UserProfile(models.Model):
     description = models.CharField(max_length=100, default="")
     slug = models.SlugField(unique=True, null=True)
 
+    followers = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True,
+                                       related_name="followers")
+
     def get_absolute_url(self):
         return reverse("accounts:detail", kwargs={"slug": self.slug})
 
+    def get_follow_instances(self):
+        return self.followers.all()
+
+    def get_follow_url(self):
+        return reverse("accounts:follow_toggle", kwargs={"slug": self.slug})
 
     @property
     def get_instance_centent_type(self):
@@ -42,4 +51,6 @@ def create_profile(sender, instance, **kwargs):
         user_profile.slug = create_slug(user_profile)
         user_profile.save()
         print (user_profile.slug)
+
+
 post_save.connect(create_profile, sender=User)
