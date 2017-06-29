@@ -10,11 +10,30 @@ from django.urls import reverse
 
 
 # Create your models here.
+def upload_location(instance, filename):
+    # filebase, extension = filename.split('.')
+    # return "%s/%s.%s%(instance.id, filebase, extension)
+    return "%s/%s" % (instance.id, filename)
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
+
+    first = models.CharField(max_length=10, default="")
+    last = models.CharField(max_length=10, default="")
+
     interests = models.CharField(max_length=100, default="")
+
     slug = models.SlugField(unique=True, null=True)
+
+    image = models.ImageField(
+        upload_to=upload_location,
+        null=True, blank=True,
+        height_field='height_field',
+        width_field='width_field',
+    )
+    height_field = models.IntegerField(default=0)
+    width_field = models.IntegerField(default=0)
+
     followers = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True,
                                        related_name="followers")
 

@@ -7,7 +7,7 @@
 {% block content %}
     <div>
         <h1>{{ profile.user.username}} Profile
-        {% include "follow_button.html" %}
+        {% include "items/follow_button.html" %}
         </h1>
     </div>
     <div>
@@ -24,67 +24,9 @@
         </div>
     {% endif %}
 
-    {% for comment in comments %}
-            <div class="row">
-                <div class="col-sm-1">
-                    <div class="thumbnail">
+    {% include "items/comments.html" %}
 
-                        <img class="img-responsive user-photo"
-                             src="https://scontent-cai1-1.xx.fbcdn.net/v/t1.0-9/16939323_1401058509968864_6117613114938574070_n.jpg?oh=93cd96fc7ee7749f3ac80a3c53bcea83&oe=59DF1074">
-                    </div><!-- /thumbnail -->
-                </div><!-- /col-sm-1 -->
-                <div class="col-sm-8">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <a href='{% url "accounts:detail" slug=comment.user.username %}'>
-                                <strong>{{ comment.user }}</strong>
-                            </a>
-                            <span class="text-muted">Posted {{ comment.timestamp|timesince }}</span>
-                        </div>
-                        <div class="panel-body">
-                            {{ comment.content }}
-                        </div><!-- /panel-body -->
-                        <footer>
-                            <strong>
-                                <a href="#" class="comment-reply-btn"> Replay </a>
-                                |
-                                {% if comment.children.count > 0 %}
-                                    {{ comment.children.count }} Comments
-                                {% endif %}
-                                |
-                                <a href="{{ comment.get_like_url }}">
-                                    {% if request.user in comment.get_like_instances %}
-                                        <span class="glyphicon glyphicon-heart" style="color: #993333"></span>
-                                    {% else %}
-                                        <span class="glyphicon glyphicon-heart" style="color: darkgray"></span>
-                                    {% endif %}
-                                </a>
-                                {{ comment.likes.count }}
-
-                            </strong>
-                            <div class="comment-reply" style="display: none">
-                                <blockquote class="blockquote">
-                                    {% for replay in comment.children %}
-                                        <p>{{ replay.content }}</p>
-                                        <footer>
-                                            {{ replay.user }} | {{ replay.timestamp|timesince }} ago
-                                        </footer>
-                                    {% endfor %}
-                                </blockquote>
-                                <form name="form" method="POST"
-                                      action="{% url "accounts:detail" slug=comment.user.username %}/">{% csrf_token %}
-                                    {{ form|crispy }}
-                                    <input type="hidden" name="parent_id" value="{{ comment.id }}">
-                                    <input type="submit" class="btn btn-default" value="Reply">
-                                </form>
-                            </div>
-                        </footer>
-                    </div><!-- /panel panel-default -->
-                </div><!-- /col-sm-5 -->
-            </div><!-- /row -->
-        {% endfor %}
-
-    <!-- Another way XD -->
+    <!-- old way -->
     <!--
         {% for comment in comments %}
                 <blockquote class="blockquote">

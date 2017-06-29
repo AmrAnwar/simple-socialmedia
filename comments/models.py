@@ -4,11 +4,11 @@ from django.db import models
 from django.conf import settings
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
+from accounts.models import UserProfile
 
 
 # from django.contrib.contenttypes.fields import GenericForeignKey
 # from django.contrib.contenttypes.models import ContentType
-
 
 # Create your models here.
 
@@ -33,4 +33,8 @@ class Comment(models.Model):
         return self.likes.all()
 
     def get_user_object(self):
-        return get_object_or_404(self.__class__, user=self.user)
+        return get_object_or_404(UserProfile, user=self.user)
+
+    def get_image_url(self):
+        user_ = get_object_or_404(UserProfile, user=self.user)
+        return user_.image.url

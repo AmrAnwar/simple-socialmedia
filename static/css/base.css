@@ -26,3 +26,6 @@
 	border-right-color:#ddd;
 	border-width:8px;
 }
+#id_content{
+    height: 100px;
+}

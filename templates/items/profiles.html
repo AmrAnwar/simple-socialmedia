@@ -1,0 +1,53 @@
+{% if  users.exists %}
+{% for profile in users %}
+    {% if request.user != profile.user %}
+
+      <div class="col-sm-3 col-md-3">
+        <div class="thumbnail">
+          {% if profile.image %}
+          <img  style="height: 192px; width:192px; "   src="{{ profile.image.url }}"  >
+          {% else %}
+          <img  class="img-responsive"  src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png"  >
+
+          {% endif %}
+
+              <div class="caption">
+            <h3>{{ profile.user }}</h3>
+            <p>interest in : {{ profile.interests}}</p>
+            <p><a href="{{ profile.get_absolute_url }}" class="btn btn-primary" role="button">View</a>
+              {% include "items/follow_button.html" %}
+            </p>
+             </div>
+        </div>
+      </div>
+        <div class="col-sm-1 col-md-1">
+        </div>
+    {% endif %}
+{% endfor %}
+{% else %}
+{% for profile in all_users %}
+    {% if request.user != profile.user %}
+
+      <div class="col-sm-3 col-md-3">
+        <div class="thumbnail">
+          {% if profile.image %}
+          <img  style="height: 192px; width:192px; "   src="{{ profile.image.url }}"  >
+          {% else %}
+          <img  class="img-responsive"  src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png"  >
+
+          {% endif %}
+
+              <div class="caption">
+            <h3>{{ profile.user }}</h3>
+            <p>interest in : {{ profile.interests}}</p>
+            <p><a href="{{ profile.get_absolute_url }}" class="btn btn-primary" role="button">View</a>
+              {% include "items/follow_button.html" %}
+            </p>
+             </div>
+        </div>
+      </div>
+        <div class="col-sm-1 col-md-1">
+        </div>
+    {% endif %}
+{% endfor %}
+{% endif %}

@@ -1,0 +1,72 @@
+{% load crispy_forms_tags %}
+{% for comment in comments %}
+            <div class="row">
+                <div class="col-sm-1 col-xs-1 col-sm-offset-1">
+                    <div class="thumbnail">
+                            {% if comment.get_user_object.image %}
+                                <img src="{{ comment.get_image_url }}" alt="...">
+                            {% else %}
+                                <img src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="...">
+                            {% endif %}
+                    </div><!-- /thumbnail -->
+                </div><!-- /col-sm-1 -->
+                <div class="col-sm-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a href='{% url "accounts:detail" slug=comment.user.username %}'>
+                                <strong>{{ comment.user }}</strong>
+                            </a>
+                            <span class="text-muted">Posted {{ comment.timestamp|timesince }}</span>
+                        </div>
+                        <div class="panel-body">
+                            <p>
+                                {{ comment.content|linebreaksbr}}
+
+                            </p>
+                        </div><!-- /panel-body -->
+                        <footer>
+                            <strong>
+                                <a href="#" class="comment-reply-btn"> Replay </a>
+                                |
+                                {% if comment.children.count > 0 %}
+                                    {{ comment.children.count }} Comments
+                                {% endif %}
+                                |
+
+                                <a href="{{ comment.get_like_url }}">
+
+                                    {% if request.user in comment.get_like_instances %}
+                                        <span class="glyphicon glyphicon-heart " style="color: #993333"></span>
+                                    {% else %}
+                                        <span class="glyphicon glyphicon-heart" style="color: darkgray"></span>
+                                    {% endif %}
+                                </a>
+                                {{ comment.likes.count }}
+
+                            </strong>
+                            <div class="comment-reply" style="display: none">
+                                <blockquote class="blockquote">
+                                    {% for replay in comment.children %}
+                                        <p>{{ replay.content }}</p>
+                                        <footer>
+                                            <a href="{% url "accounts:detail" slug=replay.user.username %}">
+                                                {{ replay.user }}
+                                            </a>  | {{ replay.timestamp|timesince }} ago
+                                        </footer>
+                                    {% endfor %}
+                                </blockquote>
+                                {% if request.user.is_authenticated %}
+
+                                <form name="form" method="POST"
+                                      action="{% url "accounts:detail" slug=comment.user.username %}/">{% csrf_token %}
+                                    {{ form|crispy }}
+                                    <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                                    <input type="submit" class="btn btn-default" value="Reply">
+                                </form>
+                                {% endif %}
+                            </div>
+                        </footer>
+                    </div><!-- /panel panel-default -->
+                </div><!-- /col-sm-5 -->
+            </div><!-- /row -->
+{% endfor %}

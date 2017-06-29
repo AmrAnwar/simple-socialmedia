@@ -1,90 +1,47 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
 
 {% block header %}
     {{ block.super }}
 {% endblock %}
 {% block content %}
-
-    <div class="row">
-        <br>
-        {#        <div class="col-sm-12">#}
-        {#            <h3>User Comment Example</h3>#}
-        {#        </div><!-- /col-sm-12 -->#}
-    </div><!-- /row -->
     {% if comments %}
-        {% for comment in comments %}
-            <div class="row">
-                <div class="col-sm-1 col-sm-offset-1">
-                    <div class="thumbnail">
+        <div class="row">
+            <div class="alert alert-info col-sm-9 col-sm-offset-1">
+                <h4>your Followers Posts : </h4>
+            </div>
+        </div>
 
-                        <img class="img-responsive user-photo"
-                             src="https://scontent-cai1-1.xx.fbcdn.net/v/t1.0-9/16939323_1401058509968864_6117613114938574070_n.jpg?oh=93cd96fc7ee7749f3ac80a3c53bcea83&oe=59DF1074">
-                    </div><!-- /thumbnail -->
-                </div><!-- /col-sm-1 -->
-                <div class="col-sm-8">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <a href='{% url "accounts:detail" slug=comment.user.username %}'>
-                                <strong>{{ comment.user }}</strong>
-                            </a>
-                            <span class="text-muted">Posted {{ comment.timestamp|timesince }}</span>
-                        </div>
-                        <div class="panel-body">
-                            {{ comment.content }}
-                        </div><!-- /panel-body -->
-                        <footer>
-                            <strong>
-                                <a href="#" class="comment-reply-btn"> Replay </a>
-                                |
-                                {% if comment.children.count > 0 %}
-                                    {{ comment.children.count }} Comments
-                                {% endif %}
-                                |
-                                <a href="{{ comment.get_like_url }}">
-                                    {% if request.user in comment.get_like_instances %}
-                                        <span class="glyphicon glyphicon-heart" style="color: #993333"></span>
-                                    {% else %}
-                                        <span class="glyphicon glyphicon-heart" style="color: darkgray"></span>
-                                    {% endif %}
-                                </a>
-                                {{ comment.likes.count }}
 
-                            </strong>
-                            <div class="comment-reply" style="display: none">
-                                <blockquote class="blockquote">
-                                    {% for replay in comment.children %}
-                                        <p>{{ replay.content }}</p>
-                                        <footer>
-                                            {{ replay.user }} | {{ replay.timestamp|timesince }} ago
-                                        </footer>
-                                    {% endfor %}
-                                </blockquote>
-                                <form name="form" method="POST"
-                                      action="{% url "accounts:detail" slug=comment.user.username %}/">{% csrf_token %}
-                                    {{ form|crispy }}
-                                    <input type="hidden" name="parent_id" value="{{ comment.id }}">
-                                    <input type="submit" class="btn btn-default" value="Reply">
-                                </form>
-                            </div>
-                        </footer>
-                    </div><!-- /panel panel-default -->
-                </div><!-- /col-sm-5 -->
-            </div><!-- /row -->
-        {% endfor %}
+        {% include "items/comments.html" %}
+        <div class="row">
 
-<div class="col-sm-offset-1" >
+        <div class="col-sm-offset-1">
+    {% elif not request.user.is_authenticated %}
+        <div class="alert alert-danger col-sm-11">
+            <h4>YOU SHOULD <strong>
+                <a href="{% url "login" %}"> Sign In</a> or
+                <a href="{% url "register" %}">Sing Up</a>
+            </strong>First to see your account</h4>
+        </div>
+        <div class="alert alert-info col-sm-11">
+            <h4>After that, You Can meet People like : </h4>
+        </div>
     {% else %}
 
-        <div class="alert alert-warning col-sm-10">
-            <h4><strong>Warning!</strong> you has no followers</h4>
+        <div class="alert alert-warning col-sm-10 ">
+            <h4><strong>Warning!</strong> you've no followers</h4>
         </div>
     {% endif %}
+{% if request.user.is_authenticated %}
+    <div class="alert alert-success col-sm-10 ">
+        <h4><strong>People</strong> interest in things like you,<strong>Click View </strong>to see their Posts, if empty(see all users) </h4>
+    </div>
+{% endif %}
 
-<div class="alert alert-info col-sm-10">
-    <h4>You Can Follow Users like :</h4>
+{% include "items/profiles.html" %}
 </div>
-    {% include "profiles.html" %}
+
+
 </div>
 
 
