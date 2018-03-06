@@ -13,9 +13,9 @@ after you've got the file run the following commands :
 virtualenv env 
 . env/bin/active 
 pip install -r requirments.txt
-python mange.py migrate
-python mange.py collectstatic 
-python mange runserver
+python manage.py migrate
+python manage.py collectstatic 
+python manage runserver
 ```
 
 ## what the user Can Do after Sign in  : 
