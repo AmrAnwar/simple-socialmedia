@@ -1,6 +1,23 @@
-**the website is Simple Social Media  Developed by me using Django Framework and Bootstrap for Style
-**
-# [The Website link  ](http://amranwar.pythonanywhere.com/ "The Websitee link :  ")
+**the website is Simple Social Media  Developed by me using Django Framework and Bootstrap for Style**
+
+------------
+
+
+unfortunately the site url doesn't available now but you can still able to access sitle locally
+after you've got the file run the following commands :
+
+
+**note you must have : pip , virtualenv installed in your system**
+
+```shell
+virtualenv env 
+. env/bin/active 
+pip install -r requirments.txt
+python mange.py migrate
+python mange.py collectstatic 
+python mange runserver
+```
+
 ## what the user Can Do after Sign in  : 
 - Post in his Profile page
 - Replay on users Posts
