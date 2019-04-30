@@ -9,7 +9,7 @@ after you've got the file run the following commands :
 
 **note you must have : pip , virtualenv installed in your system**
 
-```shell
+```bash
 virtualenv env 
 . env/bin/active 
 pip install -r requirments.txt
