@@ -1,4 +1,4 @@
-*Simple SocialMedia**
+# Simple SocialMedia
 
 ------------
 
