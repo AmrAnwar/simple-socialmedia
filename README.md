@@ -1,5 +1,7 @@
 # Simple SocialMedia
 
+the Views made using FBV(Functional based views) and not CBV (Class based views)
+
 ------------
 
 
