@@ -1,4 +1,4 @@
-**the website is Simple Social Media  Developed by me using Django Framework(function base view) and Bootstrap for Style**
+*Simple SocialMedia**
 
 ------------
 
