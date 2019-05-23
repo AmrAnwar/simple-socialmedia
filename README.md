@@ -3,13 +3,14 @@
 ------------
 
 
-unfortunately the site url doesn't available now but you can still able to access sitle locally
-after you've got the file run the following commands :
+unfortunately the site url doesn't available now but you can run the site locally by
 
 
 **note you must have : pip , virtualenv installed in your system**
 
 ```bash
+git clone https://github.com/AmrAnwar/simple-SocialMedi
+cd simple-SocialMedi
 virtualenv env 
 . env/bin/active 
 pip install -r requirments.txt
