@@ -40,13 +40,13 @@ python manage runserver
 ### Home page after the user sign in ..
 [![Home page](http://www5.0zz0.com/2017/06/29/09/432514054.png "Home page")](http://www5.0zz0.com/2017/06/29/09/432514054.png "Home page")
 ---------------
-###The USer Profile Page
+### The USer Profile Page
 [![Profile Page](http://www12.0zz0.com/2017/06/29/09/823013077.png "Profile Page")](http://www12.0zz0.com/2017/06/29/09/823013077.png "Profile Page")
 ---------------
-###search example
+### search example
 [![search example](http://www12.0zz0.com/2017/06/29/09/527219927.png "search example")](http://www12.0zz0.com/2017/06/29/09/527219927.png "search example")
 -------------------------
-###Before Sign in
+### Before Sign in
 [![Before-Sign-in](http://www14.0zz0.com/2017/06/29/09/612550591.png "Before-Sign-in")](http://www14.0zz0.com/2017/06/29/09/612550591.png "Before-Sign-in")
 ---------------
 ### Edit Profile Page
