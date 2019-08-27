@@ -1,6 +1,7 @@
 # Simple SocialMedia
 
-note: the project made as an exercise and ex for FBV(functional based views), not CBV (Class based views), if you want to check CBV for me please visit this [TODO project](https://github.com/AmrAnwar/ToDoList_Django_Project)
+## note:
+the project made as an exercise and ex for FBV(functional based views), not CBV (Class based views), if you want to check CBV for me please visit this [TODO project](https://github.com/AmrAnwar/ToDoList_Django_Project)
 
 ------------
 
